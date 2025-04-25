@@ -1,10 +1,11 @@
 package com.example.demo.repository;
 
-import com.example.demo.entity.Cart;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.demo.entity.Image;
 @Repository
-public interface CartRepository extends JpaRepository<Cart, Integer> {
+public interface ImageRepository extends JpaRepository<Image, Long> {
+
 }

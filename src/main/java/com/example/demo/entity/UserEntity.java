@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "user")
-public class User {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -14,14 +14,18 @@ public class User {
     private String avatar;
     private String email;
     private String password;
-    private int verified;
+    @Column(columnDefinition = "TINYINT(1)")
+    private boolean verified;
+    @Column(name = "verifiedToken") // Thêm field verifiedToken
     private String verifiedToken;
     private int role;
-    private int phone;
+    private String phone;
+    @Column(name = "created_at")
     private Timestamp createdAt;
+    @Column(name = "is_block")
     private int isBlock;
 
-    public User(int id, String name, String avatar, String email, String password, int verified, String verifiedToken, int role, int phone, Timestamp createdAt, int isBlock) {
+    public UserEntity(int id, String name, String avatar, String email, String password, boolean verified, String verifiedToken, int role, String phone, Timestamp createdAt, int isBlock) {
         this.id = id;
         this.name = name;
         this.avatar = avatar;
@@ -36,7 +40,7 @@ public class User {
         this.isBlock = isBlock;
     }
 
-    public User(String name, String avatar, String email, String password, int verified, String verifiedToken, int role, int phone, Timestamp createdAt, int isBlock) {
+    public UserEntity(String name, String avatar, String email, String password, boolean verified, String verifiedToken, int role, String phone, Timestamp createdAt, int isBlock) {
         this.name = name;
         this.avatar = avatar;
         this.email = email;
@@ -49,7 +53,7 @@ public class User {
         this.isBlock = isBlock;
     }
 
-    public User() {
+    public UserEntity() {
     }
 
     public int getId() {
@@ -92,11 +96,11 @@ public class User {
         this.password = password;
     }
 
-    public int getVerified() {
+    public boolean getVerified() {
         return verified;
     }
 
-    public void setVerified(int verified) {
+    public void setVerified(boolean verified) {
         this.verified = verified;
     }
 
@@ -116,11 +120,11 @@ public class User {
         this.role = role;
     }
 
-    public int getPhone() {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(int phone) {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
