@@ -52,6 +52,7 @@ public class SecurityConfig{
                 .csrf(csrf -> csrf.disable()) // Tắt CSRF cho API
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Không dùng session
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/cart/**").permitAll()
                         .requestMatchers("/api/auth/**").permitAll() // Cho phép truy cập endpoint login
                         .requestMatchers(HttpMethod.GET,"/api/products").permitAll() //cho phép lấy load sản phẩm
                         .anyRequest().authenticated()) // Các request khác cần xác thực

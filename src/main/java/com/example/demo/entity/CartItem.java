@@ -1,64 +1,31 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @Entity
+@Table(name = "cart_item")
 public class CartItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private int productId;
-    private int quantity;
-    private double price;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+    @ManyToOne
+    @JoinColumn(name = "product_id")
+    private Product product;
+    private int quantity;
     public CartItem() {
     }
 
-    public CartItem(int id, int productId, int quantity, double price) {
-        this.id = id;
-        this.productId = productId;
+    public CartItem(UserEntity user, Product product, int quantity) {
+        this.user = user;
+        this.product = product;
         this.quantity = quantity;
-        this.price = price;
-    }
-
-    public CartItem(int productId, int quantity, double price) {
-        this.productId = productId;
-        this.quantity = quantity;
-        this.price = price;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public int getProductId() {
-        return productId;
-    }
-
-    public void setProductId(int productId) {
-        this.productId = productId;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 }
