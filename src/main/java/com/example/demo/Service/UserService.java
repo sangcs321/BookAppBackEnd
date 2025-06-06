@@ -1,17 +1,22 @@
 package com.example.demo.Service;
 
 import com.example.demo.dto.UserDTO;
+import com.example.demo.dto.response.OrderResponseDTO;
+import com.example.demo.entity.Orders;
 import com.example.demo.entity.UserEntity;
 import com.example.demo.repository.UserRepository;
 import jakarta.mail.MessagingException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -67,5 +72,14 @@ public class UserService implements UserDetailsService {
         Optional<UserEntity> userOptional = userRepository.findById(userId);
         UserEntity user = userOptional.orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
         return new UserDTO(user);
+    }
+    @Transactional
+    public UserDTO updateProfile(int id, UserDTO userDTO) {
+        UserEntity user = userRepository.findById(id).get();
+        user.setName(userDTO.getName());
+        user.setAddress(userDTO.getAddress());
+        user.setPhone(userDTO.getPhone());
+        UserEntity updatedUser = userRepository.save(user);
+        return new UserDTO(updatedUser);
     }
 }

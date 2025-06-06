@@ -17,6 +17,7 @@ public class UserDTO {
     private int role;
     private boolean isBlock;
 
+    public UserDTO() {}
     public UserDTO(int id, String name,Integer id_image, String email, String phone, boolean verified, String address, int role, boolean isBlock) {
         this.id = id;
         this.name = name;

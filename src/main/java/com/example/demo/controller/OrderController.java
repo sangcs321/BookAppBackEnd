@@ -25,13 +25,11 @@ public class OrderController {
     }
     @PostMapping
     public ResponseEntity<OrderResponseDTO> createOrder(@Valid @RequestBody OrderRequestDTO request) {
-        System.out.println(request);
         OrderResponseDTO response = orderService.createOrder(request);
         return ResponseEntity.ok(response);
     }
     @PutMapping("/{id}/state")
     public ResponseEntity<OrderResponseDTO> updateStateOrder(@PathVariable("id") String id, @Param(value = "state") String state) {
-        System.out.println(state);
         int orderId = Integer.parseInt(id);
         OrderResponseDTO updatedOrder = orderService.updateState(orderId, state);
         return new ResponseEntity<OrderResponseDTO>(updatedOrder, HttpStatus.OK);
