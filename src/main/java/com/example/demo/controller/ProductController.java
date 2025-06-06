@@ -2,11 +2,15 @@ package com.example.demo.controller;
 
 import com.example.demo.Service.ProductService;
 import com.example.demo.dto.ProductDTO;
+import com.example.demo.dto.request.AddProductRequest;
+import com.example.demo.dto.response.CheckQuantityResponse;
 import com.example.demo.entity.Product;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -15,8 +19,45 @@ import java.util.List;
 public class ProductController {
     @Autowired
     private ProductService productService;
+
     @GetMapping
     public List<ProductDTO> getAllProductsWithImages() {
         return productService.getAllProductsWithImages();
+    }
+    @PutMapping("/{id}/update-quantity")
+    public ResponseEntity<ProductDTO> updateProductQuantity(
+            @PathVariable int id,
+            @RequestParam("quantity") int quantity) {
+//        Integer quantity = Integer.parseInt(String.valueOf(request));
+        try {
+            ProductDTO updatedProduct = productService.updateProductQuantity(id, quantity);
+            return ResponseEntity.ok(updatedProduct);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+    @GetMapping("/{id}/check-quantity")
+    public ResponseEntity<CheckQuantityResponse> checkProductQuantity(
+            @PathVariable int id,
+            @RequestParam("quantity") int quantity) {
+        try {
+            CheckQuantityResponse response = productService.checkProductQuantity(id, quantity);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            CheckQuantityResponse errorResponse = new CheckQuantityResponse(
+                    false, 0, "Error: " + e.getMessage()
+            );
+            return ResponseEntity.badRequest().body(errorResponse);
+        }
+    }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProductDTO> addProduct(@Valid @RequestBody AddProductRequest request) {
+        try {
+            ProductDTO productDTO = productService.addProduct(request);
+            return ResponseEntity.ok(productDTO);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
     }
 }

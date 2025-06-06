@@ -86,7 +86,7 @@ public class AuthController { // Đổi tên thành AuthController để phù h�
         }
     }
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @ModelAttribute RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         try {
             // Gọi UserService để đăng ký user mới
             UserEntity newUser = userService.registerUser(

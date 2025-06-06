@@ -36,6 +36,7 @@ public class UserDTO {
         this.email = user.getEmail();
         this.role = user.getRole();
         this.phone = user.getPhone();
+        this.address = user.getAddress();
         this.isBlock = user.isBlock();
         this.verified = user.isVerified();
     }

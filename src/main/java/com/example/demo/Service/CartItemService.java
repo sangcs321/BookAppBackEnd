@@ -74,6 +74,7 @@ public class CartItemService {
         productDTO.setId(product.getId());
         productDTO.setTitle(product.getTitle());
         productDTO.setCategory(product.getCategory());
+        productDTO.setQuantity(product.getQuantity());
         productDTO.setPrice(product.getPrice());
 
         List<ProductImageDTO> productImageDTOs = product.getProductImages().stream()

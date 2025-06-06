@@ -6,17 +6,20 @@ import lombok.Setter;
 import org.springframework.data.relational.core.mapping.Table;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "orders")
-public class Order {
+@Table(name = "orders") // Đảm bảo khai báo đúng
+public class Orders {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column(name = "user_id")
-    private int userId;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false) // Khóa ngoại tới bảng users
+    private UserEntity user; // Thay userId bằng entity User
     @Column(name = "order_code")
     private String orderCode;
     @Column(name = "created_at")
@@ -29,12 +32,14 @@ public class Order {
     private String paymentMethod;
     private String state;
 
-    public Order() {
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> orderItems = new ArrayList<>();
+    public Orders() {
     }
 
-    public Order(int id, int userId, String orderCode, Timestamp createdAt, double totalPrice, String shippingAddress, String paymentMethod, String state) {
+    public Orders(int id, UserEntity user, String orderCode, Timestamp createdAt, double totalPrice, String shippingAddress, String paymentMethod, String state) {
         this.id = id;
-        this.userId = userId;
+        this.user = user;
         this.orderCode = orderCode;
         this.createdAt = createdAt;
         this.totalPrice = totalPrice;
@@ -43,8 +48,8 @@ public class Order {
         this.state = state;
     }
 
-    public Order(int userId, String orderCode, Timestamp createdAt, double totalPrice, String shippingAddress, String paymentMethod, String state) {
-        this.userId = userId;
+    public Orders(UserEntity user, String orderCode, Timestamp createdAt, double totalPrice, String shippingAddress, String paymentMethod, String state) {
+        this.user = user;
         this.orderCode = orderCode;
         this.createdAt = createdAt;
         this.totalPrice = totalPrice;
@@ -52,6 +57,9 @@ public class Order {
         this.paymentMethod = paymentMethod;
         this.state = state;
     }
-
+    public void addOrderItem(OrderItem item) {
+        orderItems.add(item);
+        item.setOrder(this);
+    }
 
 }

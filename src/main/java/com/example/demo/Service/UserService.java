@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@AllArgsConstructor
+ @AllArgsConstructor
 public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     public List<UserEntity> findAll() {
@@ -31,9 +31,11 @@ public class UserService implements UserDetailsService {
         Optional<UserEntity> user = userRepository.findByEmail(username);
         if(user.isPresent()){
             var userOjbect = user.get();
+            String role = userOjbect.getRole()==1 ? "ADMIN" : "USER";
             return User.builder()
                     .username(userOjbect.getEmail())
                     .password(userOjbect.getPassword())
+                    .roles(role)
                     .build();
         }else {
             throw new UsernameNotFoundException(username);
@@ -62,10 +64,8 @@ public class UserService implements UserDetailsService {
         return userRepository.findByEmail(email);
     }
     public UserDTO getUserById(Integer userId) {
-        System.out.println("userService: "+userId);
         Optional<UserEntity> userOptional = userRepository.findById(userId);
         UserEntity user = userOptional.orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
-        System.out.println("userService: "+user.getId());
         return new UserDTO(user);
     }
 }

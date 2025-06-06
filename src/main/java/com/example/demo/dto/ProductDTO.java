@@ -24,6 +24,7 @@ public class ProductDTO {
     private int quantity;
     private double rating;
     private double price;
+    private double priceImport;
     private int sold;
     private List<ProductImageDTO> productImages;
 }
