@@ -20,4 +20,7 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
             "LEFT JOIN FETCH p.productImages pi " +
             "LEFT JOIN FETCH pi.image")
     List<Product> findAllProductsWithImages();
+    @Query("SELECT p FROM Product p WHERE LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')) " +
+            "AND (:category IS NULL OR LOWER(p.category) = LOWER(:category))")
+    List<Product> findByTitleContainingIgnoreCaseAndCategory(String keyword, String category);
 }

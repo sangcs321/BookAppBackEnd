@@ -26,11 +26,12 @@ public class ProductController {
     }
     @PutMapping("/{id}/update-quantity")
     public ResponseEntity<ProductDTO> updateProductQuantity(
-            @PathVariable int id,
+            @PathVariable String id,
             @RequestParam("quantity") int quantity) {
 //        Integer quantity = Integer.parseInt(String.valueOf(request));
         try {
-            ProductDTO updatedProduct = productService.updateProductQuantity(id, quantity);
+            Integer productId = Integer.parseInt(id);
+            ProductDTO updatedProduct = productService.updateProductQuantity(productId, quantity);
             return ResponseEntity.ok(updatedProduct);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(null);
@@ -49,6 +50,13 @@ public class ProductController {
             );
             return ResponseEntity.badRequest().body(errorResponse);
         }
+    }
+    @GetMapping("/search")
+    public List<ProductDTO> searchProducts(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) String category) {
+        List<ProductDTO> products = productService.searchProducts(keyword, category);
+        return products;
     }
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

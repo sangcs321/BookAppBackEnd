@@ -118,8 +118,14 @@ public class ProductService {
         productDTO.setProductImages(productImageDTOs);
         return productDTO;
     }
-
-
+    public List<ProductDTO> searchProducts(String keyword, String category) {
+        List<Product> products = productRepository.findByTitleContainingIgnoreCaseAndCategory(
+                keyword != null ? keyword.toLowerCase() : null,
+                category != null ? category.toLowerCase() : null
+        );
+        return products.stream()
+                .map(this::convertToProductDTO).collect(Collectors.toList());
+    }
 
 
 
@@ -156,6 +162,16 @@ public class ProductService {
         productDTO.setPrice(product.getPrice());
         productDTO.setQuantity(product.getQuantity());
         productDTO.setSold(product.getSold());
+        productDTO.setQuantity(product.getQuantity());
+        productDTO.setBody(product.getBody());
+        productDTO.setLanguage(product.getLanguage());
+        productDTO.setPublisher(product.getPublisher());
+        productDTO.setYearPublic(product.getYearPublic());
+        productDTO.setAuthor(product.getAuthor());
+        productDTO.setProvider(product.getProvider());
+        productDTO.setOther(product.getOther());
+        productDTO.setDiscount(product.getDiscount());
+        productDTO.setStatus(product.getStatus());
         logger.info("Product images: {}", product.getProductImages());
         List<ProductImageDTO> productImageDTOs = product.getProductImages().stream()
                 .map(this::convertToProductImageDTO)
