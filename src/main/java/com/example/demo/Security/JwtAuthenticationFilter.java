@@ -26,8 +26,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (token != null && jwtTokenProvider.validateToken(token)) {
             String username = jwtTokenProvider.getUsernameFromToken(token);
             List<String> roles = jwtTokenProvider.getRolesFromToken(token);
-
-
             List<GrantedAuthority> authorities = roles.stream()
                     .map(SimpleGrantedAuthority::new)
                     .collect(Collectors.toList());
@@ -36,8 +34,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
-        }
 
+        }
         filterChain.doFilter(request, response);
     }
 

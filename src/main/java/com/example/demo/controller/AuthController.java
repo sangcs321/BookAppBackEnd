@@ -50,23 +50,19 @@ public class AuthController { // Đổi tên thành AuthController để phù h�
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Email và mật khẩu không được để trống");
         }
-
         try {
             // Xác thực người dùng
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)
             );
-
             // Set authentication vào SecurityContext
             SecurityContextHolder.getContext().setAuthentication(authentication);
-
             // Lấy thông tin
             Optional<UserEntity> userOptional = userRepository.findByEmail(email);
             UserEntity user = userOptional.orElseThrow(() -> new RuntimeException("User not found with email: " + email));
             UserDetails userDetails = userService.loadUserByUsername(email);// Giả sử UserService có phương thức findByEmail
             // Tạo JWT token
             String jwtToken = jwtTokenProvider.generateToken(userDetails);
-
             // Tạo response
             Map<String, String> response = new HashMap<>();
             response.put("token", jwtToken);

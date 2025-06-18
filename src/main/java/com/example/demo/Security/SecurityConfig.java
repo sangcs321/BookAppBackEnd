@@ -52,7 +52,8 @@ public class SecurityConfig{
                 .csrf(csrf -> csrf.disable()) // Tắt CSRF cho API
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Không dùng session
                 .authorizeHttpRequests(auth -> auth
-
+                        .requestMatchers("/api/vnpay/create-payment").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/vnpay-return").permitAll()
                         .requestMatchers(HttpMethod.POST,"/api/products").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET,"/api/orders").hasRole("ADMIN")
                         .requestMatchers("/api/auth/**").permitAll() // Cho phép truy cập endpoint login
@@ -62,7 +63,6 @@ public class SecurityConfig{
                 .addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider, userDetailsService()),
                         UsernamePasswordAuthenticationFilter.class)
                 ;
-
         return http.build();
     }
 

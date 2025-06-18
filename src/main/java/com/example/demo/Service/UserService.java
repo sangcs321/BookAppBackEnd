@@ -52,7 +52,6 @@ public class UserService implements UserDetailsService {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("Email đã được sử dụng: " + email);
         }
-
         // Tạo user mới
         UserEntity newUser = new UserEntity();
         newUser.setEmail(email);
